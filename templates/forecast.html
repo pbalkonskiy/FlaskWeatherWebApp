@@ -1,0 +1,6 @@
+{% for day in forecast %}
+<p>{{day}}</p>
+<p>{{day.weather[0].description}}</p>
+<img src="http://openweathermap.org/img/w/{{day.weather[0].icon}}.png" alt="weather image" />
+<hr />
+{% endfor %}
