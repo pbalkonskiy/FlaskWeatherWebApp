@@ -1,8 +1,11 @@
-{% for forecast in forecast_list %}
-    <p><strong>For time: {{forecast.datetime}}</strong></p>
-    <p><strong>Description</strong>: {{forecast.description}}</p>
-    <p><strong>Temperature</strong>: {{forecast.temperature}} C</p>
-    <p><strong>Wind</strong>: {{forecast.wind}}</p>
-    <img src="http://openweathermap.org/img/w/{{forecast.icon}}.png" alt="weather image" />
-    <hr />
-{% endfor %}
+<div class="jumbotron">
+    <h4 class="display-4">6-day weather forecast for {{city}}</h4>
+    {% for forecast in forecast_list %}
+        <p><strong>For time: {{forecast.datetime}}</strong></p>
+        <p><strong>Description</strong>: {{forecast.description}}</p>
+        <p><strong>Temperature</strong>: {{forecast.temperature}} C</p>
+        <p><strong>Wind</strong>: {{forecast.wind}}</p>
+        <img src="http://openweathermap.org/img/w/{{forecast.icon}}.png" alt="weather image" />
+        <hr />
+    {% endfor %}
+</div>

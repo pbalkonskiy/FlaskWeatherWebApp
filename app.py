@@ -62,7 +62,7 @@ def forecast():
             }
             forecast_list.append(block_dict)
 
-        return render_template("index.html", forecast_list=forecast_list)
+        return render_template("index.html", forecast_list=forecast_list, city=CITY.capitalize())
     except (requests.exceptions.RequestException, requests.exceptions.RequestException) as error:
         return f"Error: {error}"
 
