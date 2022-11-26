@@ -1,13 +1,11 @@
 import requests
 import os
+import datetime as dt
 
 from flask import Flask, render_template
+from config import *
 
 API_KEY = os.environ["API_KEY"]
-BASE_URL = "https://api.openweathermap.org/data/2.5"
-CITY = "minsk"
-LAT = 53.8930
-LON = 27.5674
 
 app = Flask(__name__,
             static_url_path="",
@@ -17,7 +15,7 @@ app = Flask(__name__,
 
 @app.route("/")
 def initial():
-    return render_template("index.html", message="This is my weather application of Flask.")
+    return render_template("index.html", message="This is my weather application on Flask.")
 
 
 @app.route("/current")
@@ -27,7 +25,7 @@ def current():
         response.raise_for_status()
         data = response.json()
 
-        weather ={
+        weather = {
             "description": data["weather"][0]["description"].title(),
             "icon": data["weather"][0]["icon"],
             "name": data["name"],
@@ -46,7 +44,25 @@ def forecast():
         response = requests.get(f"{BASE_URL}/forecast?lat={LAT}&lon={LON}&units=metric&appid={API_KEY}")
         response.raise_for_status()
         data = response.json()
-        return data
+
+        for block in data["list"]:
+            date = dt.datetime.strptime(block["dt_txt"], "%Y-%m-%d %H:%M:%S")
+            if date < dt.datetime.now() or str(date)[-8:] != "15:00:00":
+                data["list"].remove(block)
+
+        forecast_list = []
+
+        for block in data["list"]:
+            block_dict = {
+                "datetime": block["dt_txt"],
+                "temperature": block["main"]["temp"],
+                "wind": block["wind"]["speed"],
+                "description": block["weather"][0]["description"].title(),
+                "icon": block["weather"][0]["icon"]
+            }
+            forecast_list.append(block_dict)
+
+        return render_template("index.html", forecast_list=forecast_list)
     except (requests.exceptions.RequestException, requests.exceptions.RequestException) as error:
         return f"Error: {error}"
 
@@ -57,4 +73,5 @@ def page_not_found(error):
 
 
 if __name__ == '__main__':
-    app.run()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=True, host="0.0.0.0", port=port)
