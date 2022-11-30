@@ -18,6 +18,22 @@ def initial():
     return render_template("index.html", message="This is my weather application on Flask.")
 
 
+# @app.route("/currency")
+# def currency():
+#     url = "https://currency-exchange.p.rapidapi.com/exchange"
+#     querystring = {"from": "USD", "to": "RUB", "q": "1.0"}
+#     headers = {
+#         "X-RapidAPI-Key": "7db48438damshcfa28d6a288a0b2p11d2b6jsn8888110947a0",
+#         "X-RapidAPI-Host": "currency-exchange.p.rapidapi.com"
+#     }
+#
+#     try:
+#         response = requests.request("GET", url=url, headers=headers, params=querystring)
+#         return response.text
+#     except requests.exceptions.RequestException as error:
+#         return f"Error: {error}"
+
+
 @app.route("/current")
 def current():
     try:
@@ -34,7 +50,7 @@ def current():
         }
 
         return render_template("index.html", weather=weather)
-    except (requests.exceptions.RequestException, requests.exceptions.RequestException) as error:
+    except requests.exceptions.RequestException as error:
         return f"Error: {error}"
 
 
@@ -63,7 +79,7 @@ def forecast():
             forecast_list.append(block_dict)
 
         return render_template("index.html", forecast_list=forecast_list, city=CITY.capitalize())
-    except (requests.exceptions.RequestException, requests.exceptions.RequestException) as error:
+    except requests.exceptions.RequestException as error:
         return f"Error: {error}"
 
 
